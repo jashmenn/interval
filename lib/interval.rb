@@ -28,7 +28,7 @@ module Interval
       'aa' => 'Doubly-augmented',
     }
 
-    SIZE_LONG_NAMES = %{x 
+    SIZE_LONG_NAMES = %w{x 
       Unison
       Second
       Third
@@ -71,7 +71,7 @@ module Interval
 
       def from_int(number)
         interval = new
-        interval.direction = number > 0 ? 1 : -1
+        interval.direction = number >= 0 ? 1 : -1
         interval.octave = number.abs / 12
         mod, intervali = *([
                [0, 1],          # unison
@@ -92,9 +92,9 @@ module Interval
 
     def to_long_name
       short_modifier = case self.interval 
-      when 1, 4, 5
+      when 2, 3, 6, 7  
         {-2 => "d", -1 => "m", 0 => "M", 1 => "a"}[self.mod]
-      when 2, 3, 6, 7
+      when 1, 4, 5, 8  
         {-1 => "d",  0 => "p", 1 => "a"}[self.mod]
       else
         raise "unknown interval"
@@ -102,6 +102,7 @@ module Interval
 
       long_modifier = QUALITY_LONG_NAMES[short_modifier]
       size = SIZE_LONG_NAMES[self.interval]
+      size = "Octave" if interval == 1 && octave > 0 
       return "%s %s" % [long_modifier, size]
     end
   end
