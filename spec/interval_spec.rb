@@ -27,6 +27,26 @@ describe "interval" do
       v = Interval::Interval.from_int(k)
       v.to_long_name.downcase.should == value.downcase
     end
+  end
 
+  it "should create from string" do
+    test_set = [
+      ["p1", "Perfect Unison"],
+      ["m2", "Minor second"],
+      ["M2", "Major second"],
+      ["m3", "Minor third"],
+      ["M3", "Major third"],
+      ["p4", "Perfect fourth"],
+      ["d5", "Diminished fifth"],
+      ["p5", "Perfect fifth"],
+      ["m6", "Minor sixth"],
+      ["M6", "Major sixth"],
+      ["m7", "Minor seventh"],
+      ["M7", "Major seventh"],
+      ["p8", "Perfect octave"]]
+    test_set.each do |key,value|
+      v = Interval::Interval.from_string(key)
+      v.to_long_name.downcase.should == value.downcase
+    end
   end
 end

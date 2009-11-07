@@ -41,22 +41,21 @@ module Interval
 
     class << self
 
-# Number of
-# semitones	name	enharmonic notes
-# 0	Perfect Unison (P1)	Diminished second (dim2)
-# 1	Minor second (m2)	Augmented unison (aug1)
-# 2	Major second (M2)	Diminished third (dim3)
-# 3	Minor third (m3)	Augmented second (aug2)
-# 4	Major third (M3)	Diminished fourth (dim4)
-# 5	Perfect fourth (P4)	Augmented third (aug3)
-# 6	Tritone	Augmented fourth (aug4)
-# Diminished fifth (dim5)
-# 7	Perfect fifth (P5)	Diminished sixth (dim6)
-# 8	Minor sixth (m6)	Augmented fifth (aug5)
-# 9	Major sixth (M6)	Diminished seventh (dim7)
-# 10	Minor seventh (m7)	Augmented sixth (aug6)
-# 11	Major seventh (M7)	Diminished octave (dim8)
-# 12	Perfect octave (P8)	Augmented seventh (aug7)
+      # Number of
+      # semitones	name	enharmonic notes
+      # 0	Perfect Unison (P1)	Diminished second (dim2)
+      # 1	Minor second (m2)	Augmented unison (aug1)
+      # 2	Major second (M2)	Diminished third (dim3)
+      # 3	Minor third (m3)	Augmented second (aug2)
+      # 4	Major third (M3)	Diminished fourth (dim4)
+      # 5	Perfect fourth (P4)	Augmented third (aug3)
+      # 6	Tritone	Augmented fourth (aug4) Diminished fifth (dim5)
+      # 7	Perfect fifth (P5)	Diminished sixth (dim6)
+      # 8	Minor sixth (m6)	Augmented fifth (aug5)
+      # 9	Major sixth (M6)	Diminished seventh (dim7)
+      # 10	Minor seventh (m7)	Augmented sixth (aug6)
+      # 11	Major seventh (M7)	Diminished octave (dim8)
+      # 12	Perfect octave (P8)	Augmented seventh (aug7)
 
       # unison  p1
       # second  m2 M2
@@ -67,6 +66,29 @@ module Interval
       # seventh m7 M7
       # octave  p8
       def from_string str
+        i = new
+        i.direction = str[0] == "-" ? -1 : 1
+        str =~ /([mMdap])(\d+)/
+        modifier, size = $1,$2
+        raise "not valid" unless modifier && size
+        size = size.to_i
+        if size <= 7 
+          i.octave = 0
+        else
+          i.octave = size % 8 # ?
+        end
+        i.interval = size - (i.octave * 7)
+
+        i.mod = case i.interval 
+        when 2, 3, 6, 7  
+          {"d" => -2, "m" => -1, "M" => 0, "a" => 1}[modifier]
+        when 1, 4, 5, 8  
+          {"d" => -1, "p" => 0, "a" => 1}[modifier]
+        else
+          raise "unknown interval"
+        end
+
+        i
       end
 
       def from_int(number)
@@ -103,7 +125,12 @@ module Interval
       long_modifier = QUALITY_LONG_NAMES[short_modifier]
       size = SIZE_LONG_NAMES[self.interval]
       size = "Octave" if interval == 1 && octave > 0 
+
+      # tritone (diminished fifth) has the following: todo
+      #<Interval::Interval:0x2efa90 @mod=0, @interval=5, @octave=0, @direction=1>
+
       return "%s %s" % [long_modifier, size]
+
     end
   end
 end
