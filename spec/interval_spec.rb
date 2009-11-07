@@ -56,12 +56,13 @@ describe "pitch" do
   it "should create from string and integer" do
 
     p = Interval::Pitch.from_string("c")
-    p.notename.should == "c"
+    p.notename.should == 0
+    p.notename_s.should == "c"
     p.accidental.should == 0
     p.octave.should == 0
 
     p2 = Interval::Pitch.from_int(p.semitone_pitch)
-    p2.notename.should == "c"
+    p2.notename_s.should == "c"
     p2.accidental.should == 0
     p2.octave.should == 0
 
@@ -71,12 +72,12 @@ describe "pitch" do
     p.semitone_pitch.should == p2.semitone_pitch
 
     p = Interval::Pitch.from_string("c#'")
-    p.notename.should == "c"
+    p.notename_s.should == "c"
     p.accidental.should == 1
     p.octave.should == 1
 
     p2 = Interval::Pitch.from_int(p.semitone_pitch)
-    p2.notename.should == "c"
+    p2.notename_s.should == "c"
     p2.accidental.should == 1
     p2.octave.should == 1
 
@@ -86,13 +87,13 @@ describe "pitch" do
     p.semitone_pitch.should == p2.semitone_pitch
  
     p = Interval::Pitch.from_string("eb,,")
-    p.notename.should == "e"
+    p.notename_s.should == "e"
     p.accidental.should == -1 
     p.octave.should == -2 
 
     p2 = Interval::Pitch.from_int(p.semitone_pitch)
     
-    p2.notename.should == "d"
+    p2.notename_s.should == "d"
     p2.accidental.should == 1 
     p2.octave.should == -2 
 
@@ -103,11 +104,11 @@ describe "pitch" do
   end
 
   it "should be able to be added to an interval" do
-    p = Interval::Pitch.from_string("c")
-    i = Interval::Interval.from_string("M3")
+    # p = Interval::Pitch.from_string("c")
+    # i = Interval::Interval.from_string("M3")
 
-    p2 = p + i
-    pp p2
+    # p2 = p + i
+    # pp p2
 
   end
 end
