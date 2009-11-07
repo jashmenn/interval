@@ -103,13 +103,77 @@ describe "pitch" do
     p.semitone_pitch.should == p2.semitone_pitch
   end
 
+  describe "adding intervals" do
+
   it "should be able to be added to an interval" do
     p = Pitch.from_string("c")
     i = Interval::Interval.from_string("M3")
     p2 = p + i
     p2.to_short_name.should == "e"
+  end
 
-    # test thirds
+  it "should add minor seconds" do
+    i = Interval::Interval.from_string("m2")
+    [["c", "db"],
+     ["f", "gb"],
+     ["Bb", "cb"],
+     ["eb", "fb"],
+     ["ab", "bbb"],
+     ["db", "ebb"],
+     ["gb", "abb"],
+     ["f#", "g"],
+     ["b", "c"],
+     ["e", "f"],
+     ["a", "bb"],
+     ["d", "eb"],
+     ["g", "ab"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
+
+  it "should add major seconds" do
+    i = Interval::Interval.from_string("M2")
+    [["c", "d"],
+     ["f", "g"],
+     ["Bb", "c"],
+     ["eb", "f"],
+     ["ab", "bb"],
+     ["db", "eb"],
+     ["gb", "ab"],
+     ["f#", "g#"],
+     ["b", "c#"],
+     ["e", "f#"],
+     ["a", "b"],
+     ["d", "e"],
+     ["g", "a"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
+
+  it "should add minor thirds" do
+    i = Interval::Interval.from_string("m3")
+    [["c", "d"],
+     ["f", "g"],
+     ["Bb", "c"],
+     ["eb", "f"],
+     ["ab", "bb"],
+     ["db", "eb"],
+     ["gb", "ab"],
+     ["f#", "g#"],
+     ["b", "c#"],
+     ["e", "f#"],
+     ["a", "b"],
+     ["d", "e"],
+     ["g", "a"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
+
+  it "should add major thirds" do
+    i = Interval::Interval.from_string("M3")
     [["c", "e"],
      ["f", "a"],
      ["Bb", "d"],
@@ -126,6 +190,28 @@ describe "pitch" do
     ].each do |pitch, new_pitch|
        (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
      end
+
+  end
+
+  it "should add perfect fifths" do
+    i = Interval::Interval.from_string("p5")
+    [["c", "g"],
+     ["f", "c"],
+     ["Bb", "f"],
+     ["eb", "bb"],
+     ["ab", "eb"],
+     ["db", "ab"],
+     ["gb", "db"],
+     ["f#", "c#"],
+     ["b", "f#"],
+     ["e", "b"],
+     ["a", "e"],
+     ["d", "a"],
+     ["g", "d"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
 
   end
 end

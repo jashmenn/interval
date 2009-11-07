@@ -197,7 +197,7 @@ module Interval
         i.direction = str[0] == "-" ? -1 : 1
         str =~ /([mMdap])(\d+)/
         modifier, size = $1,$2
-        raise "not valid" unless modifier && size
+        raise "#{str} is not a valid interval" unless modifier && size
         size = size.to_i
         if size <= 7 
           i.octave = 0
