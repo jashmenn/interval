@@ -104,11 +104,28 @@ describe "pitch" do
   end
 
   it "should be able to be added to an interval" do
-    p = Interval::Pitch.from_string("c")
+    p = Pitch.from_string("c")
     i = Interval::Interval.from_string("M3")
-
     p2 = p + i
-    pp p2
-    puts p2.to_short_name
+    p2.to_short_name.should == "e"
+
+    # test thirds
+    [["c", "e"],
+     ["f", "a"],
+     ["Bb", "d"],
+     ["eb", "g"],
+     ["ab", "c"],
+     ["db", "f"],
+     ["gb", "bb"],
+     ["f#", "a#"],
+     ["b", "d#"],
+     ["e", "g#"],
+     ["a", "c#"],
+     ["d", "f#"],
+     ["g", "b"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+
   end
 end

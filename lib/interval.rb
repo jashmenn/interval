@@ -11,7 +11,7 @@ module Interval
       def from_string(str)
         p = new
         ary = str.split(//) 
-        possible_notename = ary.shift
+        possible_notename = ary.shift.downcase
         raise "invalid notename: #{possible_notename}" unless Pitch::NOTE_NAMES_TO_I.has_key?(possible_notename)
         p.notename_i = note_s_to_i(possible_notename)
 
@@ -109,7 +109,7 @@ module Interval
     end
 
     def to_short_name
-      "%s%s" % [notename, accidental > 0 ? ('#' * accidental) : ('b' * accidental)]
+      "%s%s" % [notename, accidental > 0 ? ('#' * accidental.abs) : ('b' * accidental.abs)]
     end
 
     def +(other)
@@ -124,23 +124,11 @@ module Interval
     def plus_interval(other)
       r = self.dup
       _p = r.semitone_pitch
-      r.notename_i = r.notename_i + other.interval * other.direction
-      # p [r.notename_i, other.interval]
-      # p [r.octave, notename_i / 7, other.octave, other.direction ]
+      r.notename_i = r.notename_i + (other.interval - 1) * other.direction
       r.octave = r.octave + r.notename_i / 7 + other.octave * other.direction
-      # p [notename_i]
-      r.notename_i = notename_i % 7
-      # pp r.notename
-      # pp r.semitone_pitch
+      r.notename_i = r.notename_i % 7
       _diff = r.semitone_pitch - _p
       r.accidental = r.accidental + (other.to_i - _diff)
-
-    # r.m_notename_i = r.m_notename_i + i.m_interval * i.m_dir
-    # r.m_octave_i = r.m_octave_i + r.m_notename_i / 7 + i.m_octave * i.m_dir
-    # r.m_notename_i = r.m_notename_i % 7
-    # _diff = r.semitone_pitch() - _p
-    # r.m_accidental_i = r.m_accidental_i + (i.get_intvalue() - _diff)
-
       r
     end
   end
