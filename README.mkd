@@ -1,0 +1,12 @@
+== interval
+
+Interval is a tiny library that provides simple musicial note pitch and
+interval arithmetic. 
+
+Observe:
+
+    >> p = Interval::Pitch.from_string("c")
+    >> i = Interval::Interval.from_string("M3")
+    >> p2 = p + i
+    >> p2.to_short_name
+    => "e"
