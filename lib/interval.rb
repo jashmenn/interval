@@ -39,6 +39,7 @@ module Interval
         p
       end
 
+      # i dont think this is right. also, just start storing notename as an integer. make it a lot easier
       def notename_i(i)
         notes = 
         {'c' => 0,
@@ -50,6 +51,9 @@ module Interval
          'b' => 11}
         notes[i]
       end
+
+      # utnotename = ['c', 'd', 'e', 'f', 'g', 'a', 'b'][self.m_notename_i]\
+  
 
       def accidental_name(i)
         names =
@@ -70,12 +74,48 @@ module Interval
       self.class.notename_i(self.notename)
     end
 
+    def notename_i=(i)
+
+    end
+
     def to_long_name
       "%s%s" % [notename.upcase, self.class.accidental_name(accidental)]
     end
 
     def to_short_name
       "%s%s" % [notename, accidental > 0 ? ('#' * accidental) : ('b' * accidental)]
+    end
+
+    def +(other)
+      if other.kind_of?(Interval)
+        plus_interval(other)
+      else
+        raise "todo"
+      end
+    end
+
+    private
+    def plus_interval(other)
+      r = self.dup
+      _p = r.semitone_pitch
+      notename_i = r.notename_i + other.interval * other.direction
+      p [r.notename_i, other.interval]
+      p [r.octave, notename_i / 7, other.octave, other.direction ]
+      r.octave = r.octave + notename_i / 7 + other.octave * other.direction
+      p [notename_i]
+      r.notename = self.class.notename_i(notename_i % 7)
+      pp r.notename
+      pp r.semitone_pitch
+       # _diff = r.semitone_pitch - _p
+      # r.accidental = r.accidental + (other.to_i - _diff)
+
+    # r.m_notename_i = r.m_notename_i + i.m_interval * i.m_dir
+    # r.m_octave_i = r.m_octave_i + r.m_notename_i / 7 + i.m_octave * i.m_dir
+    # r.m_notename_i = r.m_notename_i % 7
+    # _diff = r.semitone_pitch() - _p
+    # r.m_accidental_i = r.m_accidental_i + (i.get_intvalue() - _diff)
+
+      r
     end
   end
 
@@ -205,5 +245,10 @@ module Interval
       return "%s %s" % [long_modifier, size]
 
     end
+
+    def to_i
+      return ([0, 0, 2, 4, 5, 7, 9, 11][interval] + octave * 12 + mod) * direction
+    end
+ 
   end
 end

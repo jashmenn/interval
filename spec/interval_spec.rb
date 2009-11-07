@@ -26,6 +26,7 @@ describe "interval" do
       value = test_set[k]
       v = Interval::Interval.from_int(k)
       v.to_long_name.downcase.should == value.downcase
+      v.to_i.should == k
     end
   end
 
@@ -99,5 +100,14 @@ describe "pitch" do
     p2.to_short_name.should == "d#"
 
     p.semitone_pitch.should == p2.semitone_pitch
+  end
+
+  it "should be able to be added to an interval" do
+    p = Interval::Pitch.from_string("c")
+    i = Interval::Interval.from_string("M3")
+
+    p2 = p + i
+    pp p2
+
   end
 end
