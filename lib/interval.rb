@@ -4,7 +4,7 @@ module Interval
     NOTE_NAMES_TO_I = {'c' => 0, 'd' => 1, 'e' => 2, 'f' => 3, 'g' => 4, 'a' => 5, 'b' => 6}
 
     attr_accessor :octave
-    attr_accessor :notename
+    attr_accessor :notename_i
     attr_accessor :accidental
 
     class << self
@@ -13,9 +13,7 @@ module Interval
         ary = str.split(//) 
         possible_notename = ary.shift
         raise "invalid notename: #{possible_notename}" unless Pitch::NOTE_NAMES_TO_I.has_key?(possible_notename)
-
-        # pp [possible_notename, note_s_to_i(possible_notename)]
-        p.notename = note_s_to_i(possible_notename)
+        p.notename_i = note_s_to_i(possible_notename)
 
         octave = 0
         accidental = 0
@@ -33,14 +31,14 @@ module Interval
       def from_int(midiint)
         p = new
         p.octave = (midiint - 48) / 12
-        p.notename = {0 => 0, 1 => 0, 
+        p.notename_i = {0 => 0, 1 => 0, 
                       2 => 1, 3 => 1, 
                       4 => 2, 
                       5 => 3, 6 => 3, 
                       7 => 4, 8 => 4,
                       9 => 5, 10 => 5, 
                       11 => 6}[midiint % 12]
-        p.accidental = midiint - (p.octave + 4) * 12 - ([0, 2, 4, 5, 7, 9, 11][p.notename])
+        p.accidental = midiint - (p.octave + 4) * 12 - ([0, 2, 4, 5, 7, 9, 11][p.notename_i])
         p
       end
 
@@ -49,16 +47,14 @@ module Interval
       end
 
       # def notename_s(s)
-        # {0 => 'c', 1 => 'c', 
-         # 2 => 'd', 3 => 'd', 
-         # 4 => 'e', 
-         # 5 => 'f', 6 => 'f', 
-         # 7 => 'g', 8 => 'g', 
-         # 9 => 'a', 10 => 'a', 
-         # 11 => 'c'}[s]
+      #   {0 => 'c', 1 => 'c', 
+      #    2 => 'd', 3 => 'd', 
+      #    4 => 'e', 
+      #    5 => 'f', 6 => 'f', 
+      #    7 => 'g', 8 => 'g', 
+      #    9 => 'a', 10 => 'a', 
+      #    11 => 'c'}[s]
       # end
-
-
 
       # i dont think this is right. also, just start storing notename as an integer. make it a lot easier
       # this isn't notename_i!!! this is some strange mididint accidental array. todo, redo this
@@ -94,7 +90,7 @@ module Interval
     end
 
     def semitone_pitch
-      [0, 2, 4, 5, 7, 9, 11][notename] + accidental + (octave * 12) + 48
+      [0, 2, 4, 5, 7, 9, 11][notename_i] + accidental + (octave * 12) + 48
     end
 
     # def notename_i
@@ -104,16 +100,16 @@ module Interval
     # def notename_i=(i)
     # end
 
-    def notename_s
-      self.class.notename_s(notename)
+    def notename
+      self.class.notename_s(notename_i)
     end
 
     def to_long_name
-      "%s%s" % [notename_s.upcase, self.class.accidental_name(accidental)]
+      "%s%s" % [notename.upcase, self.class.accidental_name(accidental)]
     end
 
     def to_short_name
-      "%s%s" % [notename_s, accidental > 0 ? ('#' * accidental) : ('b' * accidental)]
+      "%s%s" % [notename, accidental > 0 ? ('#' * accidental) : ('b' * accidental)]
     end
 
     def +(other)
@@ -128,16 +124,16 @@ module Interval
     def plus_interval(other)
       r = self.dup
       _p = r.semitone_pitch
-      # notename_i = r.notename_i + other.interval * other.direction
+      r.notename_i = r.notename_i + other.interval * other.direction
       # p [r.notename_i, other.interval]
       # p [r.octave, notename_i / 7, other.octave, other.direction ]
-      # r.octave = r.octave + notename_i / 7 + other.octave * other.direction
+      r.octave = r.octave + r.notename_i / 7 + other.octave * other.direction
       # p [notename_i]
-      # r.notename = self.class.notename_i(notename_i % 7)
+      r.notename_i = notename_i % 7
       # pp r.notename
       # pp r.semitone_pitch
-       # _diff = r.semitone_pitch - _p
-      # r.accidental = r.accidental + (other.to_i - _diff)
+      _diff = r.semitone_pitch - _p
+      r.accidental = r.accidental + (other.to_i - _diff)
 
     # r.m_notename_i = r.m_notename_i + i.m_interval * i.m_dir
     # r.m_octave_i = r.m_octave_i + r.m_notename_i / 7 + i.m_octave * i.m_dir
