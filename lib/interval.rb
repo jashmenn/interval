@@ -50,6 +50,16 @@ module Interval
          'b' => 11}
         notes[i]
       end
+
+      def accidental_name(i)
+        names =
+        { -2 => " double flat",
+          -1 => " flat",
+          0 => "",
+          1 => " sharp",
+          2 => " double sharp" }
+        names[i]
+      end
     end
 
     def semitone_pitch
@@ -58,6 +68,14 @@ module Interval
 
     def notename_i
       self.class.notename_i(self.notename)
+    end
+
+    def to_long_name
+      "%s%s" % [notename.upcase, self.class.accidental_name(accidental)]
+    end
+
+    def to_short_name
+      "%s%s" % [notename, accidental > 0 ? ('#' * accidental) : ('b' * accidental)]
     end
   end
 

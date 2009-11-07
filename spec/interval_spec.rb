@@ -64,6 +64,9 @@ describe "pitch" do
     p2.accidental.should == 0
     p2.octave.should == 0
 
+    p2.to_long_name.should == "C"
+    p2.to_short_name.should == "c"
+
     p.semitone_pitch.should == p2.semitone_pitch
 
     p = Interval::Pitch.from_string("c#'")
@@ -75,6 +78,9 @@ describe "pitch" do
     p2.notename.should == "c"
     p2.accidental.should == 1
     p2.octave.should == 1
+
+    p2.to_long_name.should == "C sharp"
+    p2.to_short_name.should == "c#"
 
     p.semitone_pitch.should == p2.semitone_pitch
  
@@ -88,6 +94,9 @@ describe "pitch" do
     p2.notename.should == "d"
     p2.accidental.should == 1 
     p2.octave.should == -2 
+
+    p2.to_long_name.should == "D sharp"
+    p2.to_short_name.should == "d#"
 
     p.semitone_pitch.should == p2.semitone_pitch
   end
