@@ -18,6 +18,26 @@ module Interval
         # seventh:    dim    minor   major     aug
     attr_accessor :mod # -2:dim -1:minor 0:major   1:aug
 
+    QUALITY_LONG_NAMES = {
+      'p' => 'Perfect',
+      'dd' => 'Doubly-diminished',
+      'd' => 'Diminished',
+      'm' => 'Minor',
+      'M' => 'Major',
+      'a' => 'Augmented',
+      'aa' => 'Doubly-augmented',
+    }
+
+    SIZE_LONG_NAMES = %{x 
+      Unison
+      Second
+      Third
+      Fourth
+      Fifth
+      Sixth
+      Seventh
+      Octave
+    }
 
     class << self
 
@@ -52,7 +72,7 @@ module Interval
       def from_int(number)
         interval = new
         interval.direction = number > 0 ? 1 : -1
-        interval.octave = Math.abs(number) / 12
+        interval.octave = number.abs / 12
         mod, intervali = *([
                [0, 1],          # unison
                [-1, 2], [0, 2], # second
@@ -61,10 +81,28 @@ module Interval
                [-1, 5],         # dim 5, tritone
                [0, 5],          # fifth
                [-1, 6], [0, 6], # sixth
-               [-1, 7], [0, 7]])[abs[number] % 12] # seventh
+               [-1, 7], [0, 7]])[number.abs % 12] # seventh
         interval.mod = mod 
         interval.interval = intervali
+        interval
       end
+
+
+    end
+
+    def to_long_name
+      short_modifier = case self.interval 
+      when 1, 4, 5
+        {-2 => "d", -1 => "m", 0 => "M", 1 => "a"}[self.mod]
+      when 2, 3, 6, 7
+        {-1 => "d",  0 => "p", 1 => "a"}[self.mod]
+      else
+        raise "unknown interval"
+      end
+
+      long_modifier = QUALITY_LONG_NAMES[short_modifier]
+      size = SIZE_LONG_NAMES[self.interval]
+      return "%s %s" % [long_modifier, size]
     end
   end
 end
