@@ -154,19 +154,19 @@ describe "pitch" do
 
   it "should add minor thirds" do
     i = Interval::Interval.from_string("m3")
-    [["c", "d"],
-     ["f", "g"],
-     ["Bb", "c"],
-     ["eb", "f"],
-     ["ab", "bb"],
-     ["db", "eb"],
-     ["gb", "ab"],
-     ["f#", "g#"],
-     ["b", "c#"],
-     ["e", "f#"],
-     ["a", "b"],
-     ["d", "e"],
-     ["g", "a"]
+    [["c", "eb"],
+     ["f", "ab"],
+     ["Bb", "db"],
+     ["eb", "gb"],
+     ["ab", "cb"],
+     ["db", "fb"],
+     ["gb", "bbb"],
+     ["f#", "a"],
+     ["b", "d"],
+     ["e", "g"],
+     ["a", "c"],
+     ["d", "f"],
+     ["g", "bb"]
     ].each do |pitch, new_pitch|
        (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
      end
@@ -190,7 +190,46 @@ describe "pitch" do
     ].each do |pitch, new_pitch|
        (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
      end
+  end
 
+  it "should add perfect fourths" do
+    i = Interval::Interval.from_string("p4")
+    [["c", "f"],
+     ["f", "bb"],
+     ["Bb", "eb"],
+     ["eb", "ab"],
+     ["ab", "db"],
+     ["db", "gb"],
+     ["gb", "cb"],
+     ["f#", "b"],
+     ["b", "e"],
+     ["e", "a"],
+     ["a", "d"],
+     ["d", "g"],
+     ["g", "c"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
+
+  it "should add diminished fifths (tritone)" do
+    i = Interval::Interval.from_string("d5")
+    [["c", "gb"],
+     ["f", "cb"],
+     ["Bb", "fb"],
+     ["eb", "bbb"],
+     ["ab", "ebb"],
+     ["db", "abb"],
+     ["gb", "dbb"],
+     ["f#", "c"],
+     ["b", "f"],
+     ["e", "bb"],
+     ["a", "eb"],
+     ["d", "ab"],
+     ["g", "db"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
   end
 
   it "should add perfect fifths" do
@@ -212,6 +251,110 @@ describe "pitch" do
        (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
      end
   end
+
+  it "should add minor sixths" do
+    i = Interval::Interval.from_string("m6")
+    [["c", "ab"],
+     ["f", "db"],
+     ["Bb", "gb"],
+     ["eb", "cb"],
+     ["ab", "fb"],
+     ["db", "bbb"],
+     ["gb", "ebb"],
+     ["f#", "d"],
+     ["b", "g"],
+     ["e", "c"],
+     ["a", "f"],
+     ["d", "bb"],
+     ["g", "eb"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
+
+  it "should add major sixths" do
+    i = Interval::Interval.from_string("M6")
+    [["c", "a"],
+     ["f", "d"],
+     ["Bb", "g"],
+     ["eb", "c"],
+     ["ab", "f"],
+     ["db", "bb"],
+     ["gb", "eb"],
+     ["f#", "d#"],
+     ["b", "g#"],
+     ["e", "c#"],
+     ["a", "f#"],
+     ["d", "b"],
+     ["g", "e"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
+
+  it "should add minor sevenths" do
+    i = Interval::Interval.from_string("m7")
+    [["c", "bb"],
+     ["f", "eb"],
+     ["Bb", "ab"],
+     ["eb", "db"],
+     ["ab", "gb"],
+     ["db", "cb"],
+     ["gb", "fb"],
+     ["f#", "e"],
+     ["b", "a"],
+     ["e", "d"],
+     ["a", "g"],
+     ["d", "c"],
+     ["g", "f"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
+
+  it "should add major sevenths" do
+    i = Interval::Interval.from_string("M7")
+    [["c", "b"],
+     ["f", "e"],
+     ["Bb", "a"],
+     ["eb", "d"],
+     ["ab", "g"],
+     ["db", "c"],
+     ["gb", "f"],
+     ["f#", "e#"],
+     ["b", "a#"],
+     ["e", "d#"],
+     ["a", "g#"],
+     ["d", "c#"],
+     ["g", "f#"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
+
+  it "should add perfect octaves" do
+    i = Interval::Interval.from_string("p8")
+    [["c", "c"],
+     ["f", "f"],
+     ["Bb", "bb"],
+     ["eb", "eb"],
+     ["ab", "ab"],
+     ["db", "db"],
+     ["gb", "gb"],
+     ["f#", "f#"],
+     ["b", "b"],
+     ["e", "e"],
+     ["a", "a"],
+     ["d", "d"],
+     ["g", "g"]
+    ].each do |pitch, new_pitch|
+       (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+     end
+  end
+
+
+
+
 
   end
 end

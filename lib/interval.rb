@@ -202,7 +202,7 @@ module Interval
         if size <= 7 
           i.octave = 0
         else
-          i.octave = size % 8 # ?
+          i.octave = size / 8 # ?
         end
         i.interval = size - (i.octave * 7)
 
