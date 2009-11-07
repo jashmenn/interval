@@ -1,4 +1,4 @@
-== interval
+# Interval
 
 Interval is a tiny library that provides simple musicial note pitch and
 interval arithmetic. 
@@ -10,3 +10,8 @@ Observe:
     >> p2 = p + i
     >> p2.to_short_name
     => "e"
+
+# Authors
+
+Nate Murray 2009
+based on code from GNU Solfege
