@@ -3,6 +3,62 @@ module Interval
     attr_accessor :octave
     attr_accessor :notename
     attr_accessor :accidental
+
+    class << self
+      def from_string(str)
+        p = new
+        ary = str.split(//) 
+        p.notename = ary.shift
+        raise "invalid notename: #{p.notename}" unless p.notename =~ /[cdefgab]/i
+        octave = 0
+        accidental = 0
+        while(char = ary.shift)
+          octave = octave + 1 if char == "'"
+          octave = octave - 1 if char == ","
+          accidental = accidental + 1 if char == "#"
+          accidental = accidental - 1 if char == "b"
+        end
+        p.octave = octave
+        p.accidental = accidental
+        p
+      end
+
+      def from_int(midiint)
+        p = new
+        p.octave = (midiint - 48) / 12
+
+        p.notename = {0 => 'c', 1 => 'c', 
+                      2 => 'd', 3 => 'd', 
+                      4 => 'e', 
+                      5 => 'f', 6 => 'f', 
+                      7 => 'g', 8 => 'g', 
+                      9 => 'a', 10 => 'a', 
+                      11 => 'c'}[midiint % 12]
+
+        p.accidental = midiint - (p.octave + 4) * 12 - p.notename_i
+        p
+      end
+
+      def notename_i(i)
+        notes = 
+        {'c' => 0,
+         'd' => 2,
+         'e' => 4,
+         'f' => 5,
+         'g' => 6,
+         'a' => 9,
+         'b' => 11}
+        notes[i]
+      end
+    end
+
+    def semitone_pitch
+      notename_i + accidental + (octave * 12) + 48
+    end
+
+    def notename_i
+      self.class.notename_i(self.notename)
+    end
   end
 
   class Interval
@@ -40,7 +96,6 @@ module Interval
     }
 
     class << self
-
       # Number of
       # semitones	name	enharmonic notes
       # 0	Perfect Unison (P1)	Diminished second (dim2)
@@ -65,7 +120,7 @@ module Interval
       # sixth   m6 M6
       # seventh m7 M7
       # octave  p8
-      def from_string str
+      def from_string(str)
         i = new
         i.direction = str[0] == "-" ? -1 : 1
         str =~ /([mMdap])(\d+)/

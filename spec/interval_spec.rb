@@ -50,3 +50,45 @@ describe "interval" do
     end
   end
 end
+
+describe "pitch" do
+  it "should create from string and integer" do
+
+    p = Interval::Pitch.from_string("c")
+    p.notename.should == "c"
+    p.accidental.should == 0
+    p.octave.should == 0
+
+    p2 = Interval::Pitch.from_int(p.semitone_pitch)
+    p2.notename.should == "c"
+    p2.accidental.should == 0
+    p2.octave.should == 0
+
+    p.semitone_pitch.should == p2.semitone_pitch
+
+    p = Interval::Pitch.from_string("c#'")
+    p.notename.should == "c"
+    p.accidental.should == 1
+    p.octave.should == 1
+
+    p2 = Interval::Pitch.from_int(p.semitone_pitch)
+    p2.notename.should == "c"
+    p2.accidental.should == 1
+    p2.octave.should == 1
+
+    p.semitone_pitch.should == p2.semitone_pitch
+ 
+    p = Interval::Pitch.from_string("eb,,")
+    p.notename.should == "e"
+    p.accidental.should == -1 
+    p.octave.should == -2 
+
+    p2 = Interval::Pitch.from_int(p.semitone_pitch)
+    
+    p2.notename.should == "d"
+    p2.accidental.should == 1 
+    p2.octave.should == -2 
+
+    p.semitone_pitch.should == p2.semitone_pitch
+  end
+end
