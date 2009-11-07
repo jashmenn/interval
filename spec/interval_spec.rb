@@ -352,7 +352,49 @@ describe "pitch" do
      end
   end
 
+  describe "adding enharmonic intervals" do
+    it "should add diminished seconds" do
+      i = Interval::Interval.from_string("d2")
+      [["c", "dbb"],
+       ["f", "gbb"],
+       ["Bb", "cbb"],
+       ["eb", "fbb"],
+       ["ab", "bbbb"],
+       ["db", "ebbb"],
+       ["gb", "abbb"],
+       ["f#", "gb"],
+       ["b", "cb"],
+       ["e", "fb"],
+       ["a", "bbb"],
+       ["d", "ebb"],
+       ["g", "abb"]
+      ].each do |pitch, new_pitch|
+         (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+       end
+    end
+  end
 
+  describe "finding intervals below" do
+    it "should subtract major thirds" do
+      i = Interval::Interval.from_string("-M3")
+      [["c", "ab"],
+       ["f", "db"],
+       ["Bb", "gb"],
+       ["eb", "cb"],
+       ["ab", "fb"],
+       ["db", "bbb"],
+       ["gb", "ebb"],
+       ["f#", "d"],
+       ["b", "g"],
+       ["e", "c"],
+       ["a", "f"],
+       ["d", "bb"],
+       ["g", "eb"]
+      ].each do |pitch, new_pitch|
+         (Pitch.from_string(pitch) + i).to_short_name.should == new_pitch
+       end
+    end
+  end
 
 
 

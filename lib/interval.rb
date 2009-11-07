@@ -194,7 +194,7 @@ module Interval
       # octave  p8
       def from_string(str)
         i = new
-        i.direction = str[0] == "-" ? -1 : 1
+        i.direction = str[0,1] == "-" ? -1 : 1
         str =~ /([mMdap])(\d+)/
         modifier, size = $1,$2
         raise "#{str} is not a valid interval" unless modifier && size
