@@ -1,7 +1,6 @@
 # Interval
 
-Interval is a tiny library that provides simple musicial note pitch and
-interval arithmetic. 
+Interval is a tiny library that provides simple musicial note pitch and interval arithmetic. 
 
 Observe:
 
