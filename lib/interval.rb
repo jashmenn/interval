@@ -1,3 +1,9 @@
+class Array
+  def rand
+    self[super(self.length)]
+  end
+end
+
 module Interval
   class Pitch
     NOTE_NAMES = %w{c d e f g a b}
@@ -44,6 +50,29 @@ module Interval
 
       def notename_s(s)
         NOTE_NAMES[s]
+      end
+
+      # if normal=true then only return notes you would "normally" see. 
+      # what is the word for that, natural?
+      def random(normal=false)
+        p = new
+        p.notename_i = NOTE_NAMES_TO_I.values.rand
+        p.octave = 0
+
+        accidentals = []
+        if normal
+          accidentals = case p.notename
+                        when 'c', 'f' 
+                          [0, 1]
+                        when 'e', 'b'
+                          [-1, 0]
+                        else [-1, 0, 1]
+                        end
+        else
+          accidentals = [-1, 0, 1]
+        end
+        p.accidental = accidentals.rand
+        p
       end
 
       # def notename_s(s)
@@ -112,9 +141,21 @@ module Interval
       "%s%s" % [notename, accidental > 0 ? ('#' * accidental.abs) : ('b' * accidental.abs)]
     end
 
+    def to_s
+      to_short_name
+    end
+
     def +(other)
       if other.kind_of?(Interval)
         plus_interval(other)
+      else
+        raise "todo"
+      end
+    end
+
+    def -(other)
+      if other.kind_of?(Interval)
+        minus_interval(other)
       else
         raise "todo"
       end
@@ -130,6 +171,11 @@ module Interval
       _diff = r.semitone_pitch - _p
       r.accidental = r.accidental + (other.to_i - _diff)
       r
+    end
+    def minus_interval(other)
+      other2 = other.dup
+      other2.direction = other2.direction * -1
+      plus_interval(other2)
     end
   end
 
@@ -188,7 +234,7 @@ module Interval
       # second  m2 M2
       # third   m3 M3
       # fourth  p4
-      # fifth   d5 5
+      # fifth   p5
       # sixth   m6 M6
       # seventh m7 M7
       # octave  p8
@@ -258,6 +304,10 @@ module Interval
 
       return "%s %s" % [long_modifier, size]
 
+    end
+
+    def to_s
+      to_long_name
     end
 
     def to_i
